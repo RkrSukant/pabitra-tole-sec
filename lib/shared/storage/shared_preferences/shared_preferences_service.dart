@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pabitra_security/shared/storage/shared_preferences/pref_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pabitra_security/shared/storage/shared_preferences/pref_constants.dart';
 
 class SharedPreferencesService {
   static SharedPreferencesService? _instance;
@@ -15,11 +15,12 @@ class SharedPreferencesService {
     return _instance ??= SharedPreferencesService();
   }
 
-  //is first run
-  Future<void> setIsFirstTime(bool isFirstTime) async {
-    await _sharedPref?.setBool(PrefConstants.isFirstRun, isFirstTime);
+  //Example
+  Future<void> setExample(String example) async {
+    await _sharedPref?.setString(PrefConstants.example, example);
   }
-  bool? getIsFirstTime() {
-    return _sharedPref?.getBool(PrefConstants.isFirstRun);
+
+  String? getExample() {
+    return _sharedPref?.getString(PrefConstants.example);
   }
 }

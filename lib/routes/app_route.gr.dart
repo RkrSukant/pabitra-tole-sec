@@ -9,9 +9,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i3;
-import 'package:pabitra_security/features/login/presentation/screen/login_screen.dart'
+import 'package:pabitra_security/features/auth/presentation/screens/login_screen.dart'
     as _i1;
-import 'package:pabitra_security/features/splash/presentation/screen/splash_screen.dart'
+import 'package:pabitra_security/features/landing/presentation/screens/splash_screen.dart'
     as _i2;
 
 abstract class $AppRouter extends _i3.RootStackRouter {
