@@ -6,6 +6,12 @@ class AppColors{
   final secondaryColor = const Color(0xFFFFFFFF);
   final whiteRgbaFFFFFF = const Color(0xFFFFFFFF);
 
+  static const primary = Color.fromRGBO(13, 27, 42, 1.0);       // Deep navy background
+  static const primaryDark = Color.fromRGBO(9, 20, 33, 1.0);    // Darker navy for gradient
+  static const cardBackground = Color.fromRGBO(20, 33, 61, 1.0); // Card background
+  static const buttonBlue = Color.fromRGBO(58, 123, 213, 1.0);   // Bright blue button
+  static const textLight = Color.fromRGBO(255, 255, 255, 0.85);  // Subtle white text
+
   //TOAST COLORS
   static const blue006FFD = Color.fromRGBO(0, 111, 253, 1.0);
   static const green0CCB6B = Color.fromRGBO(12, 203, 107, 1.0);
@@ -23,6 +29,10 @@ class AppColors{
   static const blue2A4ECA = Color.fromRGBO(42, 78, 202, 1.0);
 
   static const redED3241 = Color(0xFFED3241);
+
+  static const primaryDarkColor = Color.fromRGBO(9, 20, 33, 1.0);
+  static const white85 = Color.fromRGBO(255, 255, 255, 0.85);
+  static const white54 = Color.fromRGBO(255, 255, 255, 0.54);
 
 
 

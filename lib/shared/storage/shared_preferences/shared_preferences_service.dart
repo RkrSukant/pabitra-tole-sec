@@ -16,11 +16,11 @@ class SharedPreferencesService {
   }
 
   //Example
-  Future<void> setExample(String example) async {
-    await _sharedPref?.setString(PrefConstants.example, example);
+  Future<void> setPhoneNumber(String phoneNumber) async {
+    await _sharedPref?.setString(PrefConstants.phoneNumber, phoneNumber);
   }
 
-  String? getExample() {
-    return _sharedPref?.getString(PrefConstants.example);
+  String? getPhoneNumber() {
+    return _sharedPref?.getString(PrefConstants.phoneNumber);
   }
 }

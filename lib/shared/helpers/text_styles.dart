@@ -53,7 +53,44 @@ const TextStyle textFFFFFFs16w600 = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: Dimens.textSize_16);
 
+const TextStyle textFFFFFFs12w600 = TextStyle(
+    color: AppColors.whiteFFFFFF,
+    fontWeight: FontWeight.w600,
+    fontSize: Dimens.textSize_12);
+
+const TextStyle textFFFFFFs20w700 = TextStyle(
+    color: AppColors.whiteFFFFFF,
+    fontWeight: FontWeight.w700,
+    fontSize: Dimens.textSize_20);
+
+const TextStyle textFFFFFF85s14w400 = TextStyle(
+    color: AppColors.white85,
+    fontWeight: FontWeight.w400,
+    fontSize: Dimens.textSize_14);
+
+const TextStyle textFFFFFF54s14w400 = TextStyle(
+    color: AppColors.white54,
+    fontWeight: FontWeight.w400,
+    fontSize: Dimens.textSize_14);
+
+const TextStyle textFFFFFFs14w400 = TextStyle(
+    color: AppColors.whiteFFFFFF,
+    fontWeight: FontWeight.w400,
+    fontSize: Dimens.textSize_14);
+
 const TextStyle text7C8BA0s16w400 = TextStyle(
     color: AppColors.black7C8BA0,
     fontWeight: FontWeight.w400,
     fontSize: Dimens.textSize_16);
+
+const TextStyle textFFFFFFs20w600 = TextStyle(
+  color: AppColors.whiteFFFFFF,
+  fontWeight: FontWeight.w600,
+  fontSize: Dimens.textSize_20,
+);
+
+const TextStyle textFFFFFFs12w400 = TextStyle(
+  color: AppColors.whiteFFFFFF,
+  fontWeight: FontWeight.w400,
+  fontSize: Dimens.textSize_12,
+);

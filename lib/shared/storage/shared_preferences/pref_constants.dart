@@ -1,3 +1,3 @@
 class PrefConstants{
-  static const String example = "example";
+  static const String phoneNumber = "phoneNumber";
 }
