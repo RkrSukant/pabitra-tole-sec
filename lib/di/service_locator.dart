@@ -5,6 +5,12 @@ import 'package:pabitra_security/features/alert/data/local/alert_local.dart';
 import 'package:pabitra_security/features/alert/data/local/alert_local_impl.dart';
 import 'package:pabitra_security/features/alert/data/remote/alert_remote.dart';
 import 'package:pabitra_security/features/alert/data/remote/alert_remote_impl.dart';
+import 'package:pabitra_security/features/alert_sent/data/alert_sent_repository.dart';
+import 'package:pabitra_security/features/alert_sent/data/alert_sent_repository_impl.dart';
+import 'package:pabitra_security/features/alert_sent/data/local/alert_sent_local.dart';
+import 'package:pabitra_security/features/alert_sent/data/local/alert_sent_local_impl.dart';
+import 'package:pabitra_security/features/alert_sent/data/remote/alert_sent_remote.dart';
+import 'package:pabitra_security/features/alert_sent/data/remote/alert_sent_remote_impl.dart';
 import 'package:pabitra_security/features/login/data/local/login_local.dart';
 import 'package:pabitra_security/features/login/data/local/login_local_impl.dart';
 import 'package:pabitra_security/features/login/data/login_repository.dart';
@@ -36,4 +42,11 @@ Future setUpServiceLocator() async {
   locator.registerLazySingleton<AlertLocal>(() => AlertLocalImpl());
   locator.registerLazySingleton<AlertRemote>(() => AlertRemoteImpl());
   locator.registerLazySingleton<AlertRepository>(() => AlertRepositoryImpl());
+
+  // Alert Sent feature
+  locator.registerLazySingleton<AlertSentRemote>(() => AlertSentRemoteImpl());
+  locator.registerLazySingleton<AlertSentLocal>(
+      () => AlertSentLocalImpl(locator()));
+  locator.registerLazySingleton<AlertSentRepository>(
+      () => AlertSentRepositoryImpl());
 }

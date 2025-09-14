@@ -1,4 +1,4 @@
-import 'alert_remote.dart';
+import 'package:pabitra_security/features/alert/data/remote/alert_remote.dart';
 
 class AlertRemoteImpl implements AlertRemote {
   @override

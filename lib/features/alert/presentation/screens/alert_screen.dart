@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pabitra_security/features/alert/presentation/providers/alert_state_provider.dart';
 import 'package:pabitra_security/features/alert/presentation/screens/widget/alert_type_dialog.dart';
+import 'package:pabitra_security/routes/app_route.gr.dart';
 import 'package:pabitra_security/shared/helpers/colors.dart';
 import 'package:pabitra_security/shared/helpers/dimens.dart';
 import 'package:pabitra_security/shared/helpers/image_constants.dart';
@@ -40,8 +41,13 @@ class AlertScreen extends ConsumerWidget {
                         showAlertTypeDialog(
                           context,
                           houses: state.houses,
-                          onSelected: (type, house) {
-                            notifier.sendAlert(type, house: house);
+                          onSelected: (type, house) async {
+                            await notifier.sendAlert(type, house: house);
+                            if (context.mounted) {
+                              context.pushRoute(
+                                AlertSentRoute(alertId: '123'),
+                              );
+                            }
                           },
                         );
                       },
@@ -51,7 +57,7 @@ class AlertScreen extends ConsumerWidget {
                     ),
                     const Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: Dimens.spacing_24),
+                      EdgeInsets.symmetric(horizontal: Dimens.spacing_24),
                       child: Text(
                         "Press button to alert Pabitra Tole Members",
                         style: textFFFFFFs12w400,

@@ -60,10 +60,14 @@ dev_dependencies:
   floor_generator: ^1.5.0
   auto_route_generator: ^8.0.0
   freezed: ^2.4.1
+  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/drawable/ic_app_icon.png"
 # The following section is specific to Flutter packages.
 flutter:
 
