@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pabitra_security/features/login/data/login_repository.dart';
 import 'package:pabitra_security/features/login/presentation/providers/state/login_state.dart';
@@ -44,7 +45,10 @@ class LoginNotifier extends StateNotifier<LoginState> {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final ok = await _repository.verifyOtp(vId, code);
-      state = state.copyWith(isLoading: false, isVerified: ok);
+      state = state.copyWith(
+          isLoading: false,
+          isVerified: ok,
+          otpController: TextEditingController());
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }

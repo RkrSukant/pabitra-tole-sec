@@ -23,7 +23,7 @@ class LoginRemoteImpl implements LoginRemote {
         verificationCompleted: (PhoneAuthCredential credential) async {
           try {
             await _auth.signInWithCredential(credential);
-            if (!completer.isCompleted) completer.complete(null);
+            if (!completer.isCompleted) completer.complete('');
           } catch (e) {
             if (!completer.isCompleted) completer.completeError(e);
           }
