@@ -26,13 +26,9 @@ class AppRouter extends $AppRouter {
           path: Paths.alertScreen,
           page: AlertRoute.page,
         ),
-        AutoRoute(
-          path: Paths.alertSentScreen,
-          page: AlertSentRoute.page,
-        ),
     AutoRoute(
-      path: Paths.alertDetailScreen,
-      page: AlertDetailRoute.page,
+      path: Paths.alertSentScreen,
+      page: AlertSentRoute.page,
     ),
       ];
 }

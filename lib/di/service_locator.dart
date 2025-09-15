@@ -5,10 +5,6 @@ import 'package:pabitra_security/features/alert/data/local/alert_local.dart';
 import 'package:pabitra_security/features/alert/data/local/alert_local_impl.dart';
 import 'package:pabitra_security/features/alert/data/remote/alert_remote.dart';
 import 'package:pabitra_security/features/alert/data/remote/alert_remote_impl.dart';
-import 'package:pabitra_security/features/alert_detail/data/alert_detail_repository.dart';
-import 'package:pabitra_security/features/alert_detail/data/alert_detail_repository_impl.dart';
-import 'package:pabitra_security/features/alert_detail/data/remote/alert_detail_remote.dart';
-import 'package:pabitra_security/features/alert_detail/data/remote/alert_detail_remote_impl.dart';
 import 'package:pabitra_security/features/alert_sent/data/alert_sent_repository.dart';
 import 'package:pabitra_security/features/alert_sent/data/alert_sent_repository_impl.dart';
 import 'package:pabitra_security/features/alert_sent/data/local/alert_sent_local.dart';
@@ -53,9 +49,4 @@ Future setUpServiceLocator() async {
       () => AlertSentLocalImpl(locator()));
   locator.registerLazySingleton<AlertSentRepository>(
       () => AlertSentRepositoryImpl());
-
-  // Alert Detail feature
-  locator.registerLazySingleton<AlertDetailRemote>(() => AlertDetailRemoteImpl());
-  locator.registerLazySingleton<AlertDetailRepository>(
-          () => AlertDetailRepositoryImpl(locator<AlertDetailRemote>()));
 }
