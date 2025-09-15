@@ -3,6 +3,7 @@ import 'package:pabitra_security/shared/helpers/colors.dart';
 import 'package:pabitra_security/shared/helpers/dimens.dart';
 import 'package:pabitra_security/shared/helpers/text_styles.dart';
 import 'package:pabitra_security/shared/helpers/utils.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 void showAlertTypeDialog(
   BuildContext context, {
@@ -208,67 +209,104 @@ void showAlertReportDialog(BuildContext context, List<String> houses,
                   color: AppColors.whiteFFFFFF.withAlpha(100),
                 ),
                 addVerticalSpace(Dimens.spacing_16),
-
-                /// 🌟 Updated DropdownButton with nice design
-                DropdownButtonHideUnderline(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.2),
+              GestureDetector(
+                onTap: () async {
+                  final result = await showModalBottomSheet<String>(
+                    context: context,
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        color: AppColors.whiteFFFFFF.withAlpha(100),
-                      ),
                     ),
-                    child: DropdownButton<String>(
-                      value: selectedHouse,
-                      isExpanded: true,
-                      dropdownColor: AppColors.primary,
-                      icon: const Icon(
-                        Icons.arrow_drop_down_rounded,
-                        color: AppColors.whiteFFFFFF,
-                      ),
-                      hint: Row(
-                        children: [
-                          Icon(
-                            Icons.house_rounded,
-                            size: Dimens.spacing_16,
-                            color: AppColors.whiteFFFFFF,
-                          ),
-                          addHorizontalSpace(Dimens.spacing_4),
-                          const Text(
-                            "Select House Number",
-                            style: textFFFFFFs12w400,
-                          ),
-                        ],
-                      ),
-                      style: textFFFFFFs14w400,
-                      items: houses.map((h) {
-                        return DropdownMenuItem<String>(
-                          value: h,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.house_rounded,
-                                size: Dimens.spacing_16,
-                                color: AppColors.whiteFFFFFF,
+                    isScrollControlled: true,
+                    builder: (context) {
+                      String searchQuery = "";
+                      List<String> filtered = List.from(houses);
+
+                      return StatefulBuilder(
+                        builder: (context, setState) {
+                          return Padding(
+                            padding: MediaQuery.of(context).viewInsets,
+                            child: Container(
+                              padding: const EdgeInsets.all(Dimens.spacing_16),
+                              height: 400,
+                              child: Column(
+                                children: [
+                                  TextField(
+                                    autofocus: true,
+                                    style: textFFFFFFs14w400,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Search house...',
+                                      hintStyle: textFFFFFFs12w400,
+                                      prefixIcon: Icon(Icons.search, color: AppColors.whiteFFFFFF),
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        searchQuery = value.toLowerCase();
+                                        filtered = houses
+                                            .where((h) => h.toLowerCase().contains(searchQuery))
+                                            .toList();
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(height: Dimens.spacing_16),
+                                  Expanded(
+                                    child: filtered.isEmpty
+                                        ? const Center(
+                                      child: Text("No matches found", style: textFFFFFFs14w400),
+                                    )
+                                        : ListView.builder(
+                                      itemCount: filtered.length,
+                                      itemBuilder: (context, index) {
+                                        final house = filtered[index];
+                                        return ListTile(
+                                          title: Text(house, style: textFFFFFFs14w400),
+                                          leading: const Icon(Icons.house, color: AppColors.whiteFFFFFF),
+                                          onTap: () => Navigator.pop(context, house),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
-                              addHorizontalSpace(Dimens.spacing_4),
-                              Text(h, style: textFFFFFFs14w400),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedHouse = value;
-                        });
-                      },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+
+                  if (result != null) {
+                    setState(() {
+                      selectedHouse = result;
+                    });
+                  }
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: AppColors.whiteFFFFFF.withAlpha(100),
                     ),
                   ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.house_rounded, size: Dimens.spacing_16, color: AppColors.whiteFFFFFF),
+                      addHorizontalSpace(Dimens.spacing_8),
+                      Expanded(
+                        child: Text(
+                          selectedHouse ?? "Select House Number",
+                          style: textFFFFFFs14w400,
+                        ),
+                      ),
+                      const Icon(Icons.arrow_drop_down_rounded, color: AppColors.whiteFFFFFF),
+                    ],
+                  ),
                 ),
-
-                addVerticalSpace(Dimens.spacing_16),
+              ),
+              addVerticalSpace(Dimens.spacing_16),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
@@ -292,3 +330,4 @@ void showAlertReportDialog(BuildContext context, List<String> houses,
     },
   );
 }
+
