@@ -1,4 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 abstract class AlertRemote {
-  Future<List<String>> fetchHouseNumbers();
-  Future<void> sendAlert(String userId, String type, {String? house});
+  Future<String> sendAlert({
+    required String senderName,
+    required String senderPhone,
+    required String type,
+    required String house,
+  });
+
+  Future<List<String>> getAllHouses();
 }

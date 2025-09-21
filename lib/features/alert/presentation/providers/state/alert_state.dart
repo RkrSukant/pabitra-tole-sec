@@ -1,29 +1,41 @@
-import 'package:flutter/material.dart';
-
 class AlertState {
   final bool isLoading;
   final bool isSent;
+  final String? error;
+  final List<String> houses;
   final String? username;
-  final TextEditingController alertTypeController;
+  final String? phone;
+  final String? lastAlertId;
 
-  AlertState({
+  const AlertState({
     this.isLoading = false,
     this.isSent = false,
+    this.error,
+    this.houses = const [],
     this.username,
-    TextEditingController? alertTypeController,
-  }) : alertTypeController = alertTypeController ?? TextEditingController();
+    this.phone,
+    this.lastAlertId,
+  });
 
   AlertState copyWith({
     bool? isLoading,
     bool? isSent,
+    String? error,
+    List<String>? houses,
     String? username,
-    TextEditingController? alertTypeController,
+    String? phone,
+    String? lastAlertId,
   }) {
     return AlertState(
       isLoading: isLoading ?? this.isLoading,
       isSent: isSent ?? this.isSent,
+      error: error,
+      houses: houses ?? this.houses,
       username: username ?? this.username,
-      alertTypeController: alertTypeController ?? this.alertTypeController,
+      phone: phone ?? this.phone,
+      lastAlertId: lastAlertId ?? this.lastAlertId,
     );
   }
+
+  factory AlertState.initial() => const AlertState();
 }

@@ -8,20 +8,22 @@ class LoginRepositoryImpl implements LoginRepository {
   final LoginRemote _remote = locator<LoginRemote>();
 
   @override
-  Future<String?> sendOtp(String phoneNumber) async {
-    final verificationId = await _remote.sendOtp(phoneNumber);
-    await _local.savePhoneNumber(phoneNumber);
-    return verificationId;
+  Future<bool> checkPhoneNumber(String phoneNumber) async {
+    final ok = await _remote.checkPhoneNumber(phoneNumber);
+    if(ok) await _local.setLogin();
+    if (ok) await _local.savePhoneNumber(phoneNumber);
+    return ok;
   }
 
   @override
-  Future<bool> verifyOtp(String verificationId, String smsCode) async {
-    return await _remote.verifyOtp(verificationId, smsCode);
-  }
-
-  @override
-  Future<void> savePhoneNumber(String phoneNumber) => _local.savePhoneNumber(phoneNumber);
+  Future<void> savePhoneNumber(String phoneNumber) =>
+      _local.savePhoneNumber(phoneNumber);
 
   @override
   Future<String?> getPhoneNumber() => _local.getPhoneNumber();
+
+  @override
+  Future<void> logout() async{
+    _local.logout();
+  }
 }

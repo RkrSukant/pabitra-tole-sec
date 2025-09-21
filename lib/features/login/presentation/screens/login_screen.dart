@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,9 +21,15 @@ class LoginScreen extends ConsumerWidget {
     final state = ref.watch(loginNotifierProvider);
     final notifier = ref.read(loginNotifierProvider.notifier);
 
+    // When login succeeds → go to Alert screen
     ref.listen<LoginState>(loginNotifierProvider, (prev, next) {
       if (next.isVerified && prev?.isVerified != true) {
         context.replaceRoute(const AlertRoute());
+      }
+      if (next.error != null && next.error!.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next.error!)),
+        );
       }
     });
 
@@ -33,7 +40,7 @@ class LoginScreen extends ConsumerWidget {
           Center(
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: Dimens.spacing_32),
+              const EdgeInsets.symmetric(horizontal: Dimens.spacing_32),
               child: Container(
                 padding: const EdgeInsets.all(Dimens.spacing_24),
                 decoration: BoxDecoration(
@@ -65,58 +72,33 @@ class LoginScreen extends ConsumerWidget {
                         hintStyle: textFFFFFF54s14w400,
                         border: OutlineInputBorder(
                           borderRadius:
-                              BorderRadius.circular(Dimens.spacing_12),
+                          BorderRadius.circular(Dimens.spacing_12),
                           borderSide: BorderSide.none,
                         ),
                       ),
                       style: textFFFFFFs14w400,
                     ),
-                    if (state.isOtpSent) ...[
-                      addVerticalSpace(Dimens.spacing_16),
-                      TextField(
-                        controller: state.otpController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: Strings.otpHint,
-                          hintStyle: textFFFFFF54s14w400,
-                          filled: true,
-                          fillColor: AppColors.primaryDarkColor,
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(Dimens.spacing_12),
-                            borderSide: BorderSide.none,
-                          ),
-                        ),
-                        style: textFFFFFFs14w400,
-                      ),
-                    ],
                     addVerticalSpace(Dimens.spacing_16),
                     ElevatedButton(
                       onPressed: state.isLoading
                           ? null
                           : () {
-                              if (!state.isOtpSent) {
-                                notifier.sendOtp();
-                              } else {
-                                notifier.verifyOtp();
-                              }
-                            },
+                        notifier.login();
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.buttonBlue,
                         minimumSize: const Size.fromHeight(Dimens.spacing_56),
                         shape: RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.circular(Dimens.spacing_16),
+                          BorderRadius.circular(Dimens.spacing_16),
                         ),
                       ),
                       child: state.isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
-                              !state.isOtpSent
-                                  ? Strings.sendOtp
-                                  : Strings.verifyOtp,
-                              style: textFFFFFFs16w600,
-                            ),
+                        Strings.login,
+                        style: textFFFFFFs16w600,
+                      ),
                     ),
                   ],
                 ),

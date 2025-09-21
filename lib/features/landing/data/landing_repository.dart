@@ -1,1 +1,3 @@
-abstract class LandingRepository {}
+abstract class LandingRepository {
+  Future<bool> checkIfLoggedIn();
+}

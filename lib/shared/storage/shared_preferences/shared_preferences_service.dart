@@ -15,12 +15,27 @@ class SharedPreferencesService {
     return _instance ??= SharedPreferencesService();
   }
 
-  //Example
+  Future<void> setIsLoggedIn(bool isLoggedIn) async {
+    await _sharedPref?.setBool(PrefConstants.isLoggedIn, isLoggedIn);
+  }
+
+  bool? getIsLoggedIn() {
+    return _sharedPref?.getBool(PrefConstants.isLoggedIn);
+  }
+
   Future<void> setPhoneNumber(String phoneNumber) async {
     await _sharedPref?.setString(PrefConstants.phoneNumber, phoneNumber);
   }
 
   String? getPhoneNumber() {
     return _sharedPref?.getString(PrefConstants.phoneNumber);
+  }
+
+  Future<void> setUserName(String userName) async {
+    await _sharedPref?.setString(PrefConstants.userName, userName);
+  }
+
+  String? getUserName() {
+    return _sharedPref?.getString(PrefConstants.userName);
   }
 }

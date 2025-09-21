@@ -1,6 +1,6 @@
 abstract class LoginRepository {
-  Future<String?> sendOtp(String phoneNumber);
-  Future<bool> verifyOtp(String verificationId, String smsCode);
+  Future<void> logout();
+  Future<bool> checkPhoneNumber(String phoneNumber);
   Future<void> savePhoneNumber(String phoneNumber);
   Future<String?> getPhoneNumber();
 }

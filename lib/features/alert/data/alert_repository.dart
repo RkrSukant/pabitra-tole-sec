@@ -1,4 +1,9 @@
 abstract class AlertRepository {
-  Future<List<String>> fetchHouseNumbers();
-  Future<void> sendAlert(String userId, String type, {String? house});
+  Future<String> sendAlert({
+    required String senderPhone,
+    required String type,
+    required String house,
+  });
+
+  Future<List<String>> getAllHouses();
 }

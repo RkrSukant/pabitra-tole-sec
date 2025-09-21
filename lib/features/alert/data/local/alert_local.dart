@@ -1,1 +1,3 @@
-abstract class AlertLocal {}
+abstract class AlertLocal {
+  String getUserName();
+}

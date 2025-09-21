@@ -3,7 +3,6 @@ import 'package:pabitra_security/shared/helpers/colors.dart';
 import 'package:pabitra_security/shared/helpers/dimens.dart';
 import 'package:pabitra_security/shared/helpers/text_styles.dart';
 import 'package:pabitra_security/shared/helpers/utils.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 
 void showAlertTypeDialog(
   BuildContext context, {

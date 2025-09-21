@@ -1,1 +1,3 @@
-abstract class LandingLocal {}
+abstract class LandingLocal {
+  Future<bool> checkIfLoggedIn();
+}
