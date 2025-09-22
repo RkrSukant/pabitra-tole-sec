@@ -10,4 +10,9 @@ class AlertLocalImpl implements AlertLocal {
   String getUserName(){
     return sharedPrefs.getUserName() ?? "N/A";
   }
+
+  @override
+  String getPhoneNumber() {
+    return sharedPrefs.getPhoneNumber() ?? "N/A";
+  }
 }

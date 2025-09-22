@@ -22,7 +22,6 @@ class AlertNotifier extends StateNotifier<AlertState> {
     state = state.copyWith(isLoading: true, error: null, isSent: false);
     try {
       final id = await _repository.sendAlert(
-        senderPhone: state.phone ?? '', // store phone in state on login
         type: type,
         house: house,
       );

@@ -10,7 +10,6 @@ class ApiClient {
       headers: {
         'accept': 'application/json',
         'content-type': 'application/json',
-        'x-client-type': 'MobileApp',
         'x-api-key': 'mySecretKey123',
       },
     ),

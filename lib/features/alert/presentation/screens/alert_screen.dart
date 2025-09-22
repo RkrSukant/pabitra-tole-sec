@@ -59,7 +59,7 @@ class AlertScreen extends ConsumerWidget {
                           context,
                           houses: state.houses,
                           onSelected: (type, house) async {
-                            await notifier.sendAlert(type, house: house ?? "");
+                            await notifier.sendAlert(type, house: house ?? "N/A");
                             if (context.mounted) {
                               context.pushRoute(
                                 AlertSentRoute(alertId: '123'),
