@@ -1,7 +1,8 @@
+import 'package:pabitra_security/di/service_locator.dart';
 import 'package:pabitra_security/features/alert/data/alert_repository.dart';
 import 'package:pabitra_security/features/alert/data/local/alert_local.dart';
 import 'package:pabitra_security/features/alert/data/remote/alert_remote.dart';
-import 'package:pabitra_security/di/service_locator.dart';
+import 'package:pabitra_security/features/login/data/model/user_model.dart';
 
 class AlertRepositoryImpl implements AlertRepository {
   final AlertRemote _remote = locator<AlertRemote>();
@@ -10,20 +11,23 @@ class AlertRepositoryImpl implements AlertRepository {
   @override
   Future<String> sendAlert({
     required String type,
-    required String house,
-  }) {
-    String username = _local.getUserName();
-    String phoneNumber = _local.getPhoneNumber();
+  }) async{
+    UserInfo user = await _local.getUserInfo();
     return _remote.sendAlert(
-      senderName: username,
-      senderPhone: phoneNumber,
+      senderName: user.name,
+      senderPhone: user.phone,
       type: type,
-      house: house,
+      house: user.house,
     );
   }
 
   @override
   Future<List<String>> getAllHouses() {
     return _remote.getAllHouses();
+  }
+
+  @override
+  Future<UserInfo> getUserInfo() async {
+    return _local.getUserInfo();
   }
 }

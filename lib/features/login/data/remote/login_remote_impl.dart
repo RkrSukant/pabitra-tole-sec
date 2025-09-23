@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pabitra_security/features/login/data/model/user_model.dart';
 import 'login_remote.dart';
 
 class LoginRemoteImpl implements LoginRemote {
@@ -11,9 +12,17 @@ class LoginRemoteImpl implements LoginRemote {
   }
 
   @override
-  Future<bool> checkPhoneNumber(String phoneNumber) async {
+  Future<UserInfo?> checkPhoneNumber(String phoneNumber) async {
     final normalized = _normalize(phoneNumber);
     final doc = await _db.collection('users').doc(normalized).get();
-    return doc.exists;
+
+    if (!doc.exists) return null;
+
+    final data = doc.data()!;
+    return UserInfo(
+      phone: normalized,
+      name: data['name'] ?? '',
+      house: data['house_number'] ?? '',
+    );
   }
 }

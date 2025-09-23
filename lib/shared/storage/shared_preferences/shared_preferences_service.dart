@@ -38,4 +38,12 @@ class SharedPreferencesService {
   String? getUserName() {
     return _sharedPref?.getString(PrefConstants.userName);
   }
+
+  Future<void> setHouseNumber(String houseNumber) async {
+    await _sharedPref?.setString(PrefConstants.houseNumber, houseNumber);
+  }
+
+  String? getHouseNumber() {
+    return _sharedPref?.getString(PrefConstants.houseNumber);
+  }
 }

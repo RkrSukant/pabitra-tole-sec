@@ -30,13 +30,15 @@ class AlertSentScreen extends ConsumerWidget {
               onTap: (){
                 context.pop();
               },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: Dimens.spacing_32, vertical: Dimens.spacing_48),
-                child: Icon(
-                  Icons.arrow_circle_left_outlined,
-                  color: AppColors.whiteFFFFFF,
-                  size: Dimens.spacing_24,
+              child: Container(
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: Dimens.spacing_32, vertical: Dimens.spacing_48),
+                  child: Icon(
+                    Icons.arrow_circle_left_outlined,
+                    color: AppColors.whiteFFFFFF,
+                    size: Dimens.spacing_24,
+                  ),
                 ),
               ),
             ),

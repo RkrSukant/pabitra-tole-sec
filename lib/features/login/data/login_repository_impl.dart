@@ -9,10 +9,14 @@ class LoginRepositoryImpl implements LoginRepository {
 
   @override
   Future<bool> checkPhoneNumber(String phoneNumber) async {
-    final ok = await _remote.checkPhoneNumber(phoneNumber);
-    if(ok) await _local.setLogin();
-    if (ok) await _local.savePhoneNumber(phoneNumber);
-    return ok;
+    final user = await _remote.checkPhoneNumber(phoneNumber);
+    if (user != null) {
+      await _local.setLogin();
+      await _local.saveUser(user);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
@@ -23,7 +27,7 @@ class LoginRepositoryImpl implements LoginRepository {
   Future<String?> getPhoneNumber() => _local.getPhoneNumber();
 
   @override
-  Future<void> logout() async{
+  Future<void> logout() async {
     _local.logout();
   }
 }

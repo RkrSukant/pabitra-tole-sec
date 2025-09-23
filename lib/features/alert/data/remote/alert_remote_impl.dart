@@ -35,7 +35,7 @@ class AlertRemoteImpl implements AlertRemote {
   Future<List<String>> getAllHouses() async {
     final query = await _fireStore.collection('users').get();
     return query.docs
-        .map((doc) => (doc.data()['house'] as String?) ?? '')
+        .map((doc) => (doc.data()['house_number'] as String?) ?? '')
         .where((h) => h.isNotEmpty)
         .toList();
   }
