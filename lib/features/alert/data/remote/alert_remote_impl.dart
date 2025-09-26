@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:pabitra_security/di/service_locator.dart';
+import 'package:pabitra_security/features/alert/data/model/alert_response_model.dart';
 import 'package:pabitra_security/features/alert/data/remote/alert_remote.dart';
 import 'package:pabitra_security/remote/api_client.dart';
 
@@ -9,14 +10,13 @@ class AlertRemoteImpl implements AlertRemote {
   final ApiClient _apiClient = locator<ApiClient>();
 
   @override
-  Future<String> sendAlert({
+  Future<AlertModel> sendAlert({
     required String senderName,
     required String senderPhone,
     required String type,
     required String house,
   }) async {
     try {
-
       final Response response = await _apiClient.sendAlert(
         name: senderName,
         senderPhone: senderPhone,
@@ -25,7 +25,15 @@ class AlertRemoteImpl implements AlertRemote {
       );
 
       final alertId = response.data['alertId'] ?? '';
-      return alertId.toString();
+      final alert = AlertModel(
+        id: alertId,
+        house: house,
+        senderName: senderName,
+        senderPhone: senderPhone,
+        type: type,
+        timestamp: DateTime.now(),
+      );
+      return alert;
     } catch (e) {
       throw Exception('Failed to send alert: ${e.toString()}');
     }

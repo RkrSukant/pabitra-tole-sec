@@ -15,4 +15,5 @@ class Strings {
   static const String phonePrefix = "+977";
 
   static const String alert = "+977";
+  static const String alert_sent_msg = "An Alert has been sent to all members of Pabitra Tole with the following details";
 }

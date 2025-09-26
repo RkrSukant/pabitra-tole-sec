@@ -4,7 +4,6 @@ import 'package:pabitra_security/features/login/data/model/user_model.dart';
 import 'package:pabitra_security/shared/storage/shared_preferences/shared_preferences_service.dart';
 
 class AlertLocalImpl implements AlertLocal {
-
   SharedPreferencesService sharedPrefs = locator<SharedPreferencesService>();
 
   @override

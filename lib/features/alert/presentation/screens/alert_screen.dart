@@ -1,9 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:pabitra_security/features/alert/presentation/providers/alert_state_provider.dart';
 import 'package:pabitra_security/features/alert/presentation/screens/widget/alert_type_dialog.dart';
 import 'package:pabitra_security/features/login/presentation/providers/login_state_provider.dart';
@@ -12,6 +10,7 @@ import 'package:pabitra_security/shared/helpers/colors.dart';
 import 'package:pabitra_security/shared/helpers/dimens.dart';
 import 'package:pabitra_security/shared/helpers/image_constants.dart';
 import 'package:pabitra_security/shared/helpers/text_styles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @RoutePage()
 class AlertScreen extends ConsumerStatefulWidget {
@@ -86,12 +85,14 @@ class _AlertScreenState extends ConsumerState<AlertScreen> {
                           onSelected: (type, house) async {
                             await notifier.sendAlert(
                               type,
+                              (alertModel) {
+                                if (context.mounted) {
+                                  context.pushRoute(
+                                    AlertSentRoute(alertModel: alertModel),
+                                  );
+                                }
+                              },
                             );
-                            if (context.mounted) {
-                              context.pushRoute(
-                                AlertSentRoute(alertId: '123'),
-                              );
-                            }
                           },
                         );
                       },

@@ -1,6 +1,6 @@
+import 'package:pabitra_security/di/service_locator.dart';
 import 'package:pabitra_security/features/login/data/model/user_model.dart';
 import 'package:pabitra_security/shared/storage/shared_preferences/shared_preferences_service.dart';
-import 'package:pabitra_security/di/service_locator.dart';
 
 import 'login_local.dart';
 
@@ -23,7 +23,7 @@ class LoginLocalImpl implements LoginLocal {
   }
 
   @override
-  Future<void> logout() async{
+  Future<void> logout() async {
     await _prefs.setIsLoggedIn(false);
     await _prefs.setPhoneNumber("");
     await _prefs.setUserName("");

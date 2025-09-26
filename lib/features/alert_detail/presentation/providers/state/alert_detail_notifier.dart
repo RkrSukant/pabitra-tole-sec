@@ -12,27 +12,8 @@ class AlertDetailNotifier extends StateNotifier<AlertDetailState> {
   Future<void> loadAlert(String alertId) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final data = await _repository.getAlertById(alertId);
-      final phone = await _getLocalPhone();
-      bool hasResp = false;
-      bool? respComing;
-      if (data != null && data['responses'] != null && phone != null) {
-        final responses = List<Map<String, dynamic>>.from(data['responses']);
-        final match = responses.firstWhere(
-              (r) => (r['responderPhone'] ?? r['id'] ?? '') == phone,
-          orElse: () => {},
-        );
-        if (match.isNotEmpty) {
-          hasResp = true;
-          respComing = match['coming'] == true;
-        }
-      }
-      state = state.copyWith(
-        isLoading: false,
-        alertData: data,
-        hasResponded: hasResp,
-        respondedComing: respComing,
-      );
+      final alert = await _repository.getAlertById(alertId);
+      state = state.copyWith(isLoading: false, alert: alert);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }

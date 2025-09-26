@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pabitra_security/features/alert/data/model/alert_response_model.dart';
 
 abstract class AlertDetailRemote {
-  Future<Map<String, dynamic>?> getAlertById(String alertId);
+  Future<AlertModel?> getAlertById(String alertId);
 
   Future<void> respondToAlert({
     required String alertId,

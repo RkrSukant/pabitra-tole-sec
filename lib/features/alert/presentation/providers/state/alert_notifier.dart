@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pabitra_security/features/alert/data/alert_repository.dart';
+import 'package:pabitra_security/features/alert/data/model/alert_response_model.dart';
 import 'package:pabitra_security/features/alert/presentation/providers/state/alert_state.dart';
 import 'package:pabitra_security/features/login/data/model/user_model.dart';
 
@@ -8,12 +9,13 @@ class AlertNotifier extends StateNotifier<AlertState> {
 
   AlertNotifier(this._repository) : super(AlertState.initial());
 
-  Future<void> initializeAlertScreen() async{
+  Future<void> initializeAlertScreen() async {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final houses = await _repository.getAllHouses();
       UserInfo user = await _repository.getUserInfo();
-      state = state.copyWith(isLoading: false, houses: houses, username: user.name);
+      state =
+          state.copyWith(isLoading: false, houses: houses, username: user.name);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
@@ -29,13 +31,14 @@ class AlertNotifier extends StateNotifier<AlertState> {
     }
   }
 
-  Future<void> sendAlert(String type) async {
+  Future<void> sendAlert(String type, Function(AlertModel alertModel) callback) async {
     state = state.copyWith(isLoading: true, error: null, isSent: false);
     try {
-      final id = await _repository.sendAlert(
+      AlertModel model = await _repository.sendAlert(
         type: type,
       );
-      state = state.copyWith(isLoading: false, isSent: true, lastAlertId: id);
+      state = state.copyWith(isLoading: false, isSent: true, lastAlertId: model);
+      callback(model);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }

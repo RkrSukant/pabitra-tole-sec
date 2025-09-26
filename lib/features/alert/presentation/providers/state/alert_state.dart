@@ -1,3 +1,5 @@
+import 'package:pabitra_security/features/alert/data/model/alert_response_model.dart';
+
 class AlertState {
   final bool isLoading;
   final bool isSent;
@@ -5,7 +7,7 @@ class AlertState {
   final List<String> houses;
   final String? username;
   final String? phone;
-  final String? lastAlertId;
+  final AlertModel? lastAlertId;
 
   const AlertState({
     this.isLoading = false,
@@ -24,7 +26,7 @@ class AlertState {
     List<String>? houses,
     String? username,
     String? phone,
-    String? lastAlertId,
+    AlertModel? lastAlertId,
   }) {
     return AlertState(
       isLoading: isLoading ?? this.isLoading,

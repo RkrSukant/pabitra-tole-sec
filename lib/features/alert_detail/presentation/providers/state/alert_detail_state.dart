@@ -1,8 +1,10 @@
+import 'package:pabitra_security/features/alert/data/model/alert_response_model.dart';
+
 class AlertDetailState {
   final bool isLoading;
   final bool isResponding;
   final String? error;
-  final Map<String, dynamic>? alertData;
+  final AlertModel? alert;        // <— changed to AlertModel instead of Map
   final bool hasResponded;
   final bool? respondedComing;
 
@@ -10,7 +12,7 @@ class AlertDetailState {
     this.isLoading = false,
     this.isResponding = false,
     this.error,
-    this.alertData,
+    this.alert,
     this.hasResponded = false,
     this.respondedComing,
   });
@@ -19,7 +21,7 @@ class AlertDetailState {
     bool? isLoading,
     bool? isResponding,
     String? error,
-    Map<String, dynamic>? alertData,
+    AlertModel? alert,
     bool? hasResponded,
     bool? respondedComing,
   }) {
@@ -27,7 +29,7 @@ class AlertDetailState {
       isLoading: isLoading ?? this.isLoading,
       isResponding: isResponding ?? this.isResponding,
       error: error,
-      alertData: alertData ?? this.alertData,
+      alert: alert ?? this.alert,
       hasResponded: hasResponded ?? this.hasResponded,
       respondedComing: respondedComing ?? this.respondedComing,
     );

@@ -10,6 +10,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i6;
 import 'package:flutter/material.dart' as _i7;
+import 'package:pabitra_security/features/alert/data/model/alert_response_model.dart'
+    as _i8;
 import 'package:pabitra_security/features/alert/presentation/screens/alert_screen.dart'
     as _i2;
 import 'package:pabitra_security/features/alert_detail/presentation/screens/alert_detail_screen.dart'
@@ -51,7 +53,7 @@ abstract class $AppRouter extends _i6.RootStackRouter {
         routeData: routeData,
         child: _i3.AlertSentScreen(
           key: args.key,
-          alertId: args.alertId,
+          alertModel: args.alertModel,
         ),
       );
     },
@@ -128,13 +130,13 @@ class AlertRoute extends _i6.PageRouteInfo<void> {
 class AlertSentRoute extends _i6.PageRouteInfo<AlertSentRouteArgs> {
   AlertSentRoute({
     _i7.Key? key,
-    required String alertId,
+    required _i8.AlertModel alertModel,
     List<_i6.PageRouteInfo>? children,
   }) : super(
           AlertSentRoute.name,
           args: AlertSentRouteArgs(
             key: key,
-            alertId: alertId,
+            alertModel: alertModel,
           ),
           initialChildren: children,
         );
@@ -148,16 +150,16 @@ class AlertSentRoute extends _i6.PageRouteInfo<AlertSentRouteArgs> {
 class AlertSentRouteArgs {
   const AlertSentRouteArgs({
     this.key,
-    required this.alertId,
+    required this.alertModel,
   });
 
   final _i7.Key? key;
 
-  final String alertId;
+  final _i8.AlertModel alertModel;
 
   @override
   String toString() {
-    return 'AlertSentRouteArgs{key: $key, alertId: $alertId}';
+    return 'AlertSentRouteArgs{key: $key, alertModel: $alertModel}';
   }
 }
 

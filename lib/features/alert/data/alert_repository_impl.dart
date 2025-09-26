@@ -1,6 +1,7 @@
 import 'package:pabitra_security/di/service_locator.dart';
 import 'package:pabitra_security/features/alert/data/alert_repository.dart';
 import 'package:pabitra_security/features/alert/data/local/alert_local.dart';
+import 'package:pabitra_security/features/alert/data/model/alert_response_model.dart';
 import 'package:pabitra_security/features/alert/data/remote/alert_remote.dart';
 import 'package:pabitra_security/features/login/data/model/user_model.dart';
 
@@ -9,9 +10,9 @@ class AlertRepositoryImpl implements AlertRepository {
   final AlertLocal _local = locator<AlertLocal>();
 
   @override
-  Future<String> sendAlert({
+  Future<AlertModel> sendAlert({
     required String type,
-  }) async{
+  }) async {
     UserInfo user = await _local.getUserInfo();
     return _remote.sendAlert(
       senderName: user.name,

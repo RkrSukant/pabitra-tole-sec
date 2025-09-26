@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pabitra_security/di/service_locator.dart';
+import 'package:pabitra_security/features/login/data/login_repository.dart';
 import 'package:pabitra_security/routes/app_route.dart';
 import 'package:pabitra_security/routes/app_route.gr.dart';
 import 'package:pabitra_security/shared/helpers/app_theme.dart';
@@ -13,13 +14,13 @@ import 'package:pabitra_security/shared/helpers/strings.dart';
 import 'di/service_locator.dart' as di;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
-/// Background handler – needed for FCM
+/// Background FCM handler
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  // You can log/store data here if needed
+  // Optionally handle data here
 }
 
 Future<void> main() async {
@@ -30,56 +31,68 @@ Future<void> main() async {
   // Background notifications
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  // Ask permission on iOS
+  // iOS permission
   await FirebaseMessaging.instance.requestPermission();
 
-  // Subscribe to the alerts topic
+  // Subscribe to topic if needed
   FirebaseMessaging.instance.subscribeToTopic('alerts');
 
-  // Init local notifications plugin
+  // Init local notifications
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@mipmap/ic_launcher');
 
   const InitializationSettings initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid);
+      InitializationSettings(android: initializationSettingsAndroid);
 
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
-    onDidReceiveNotificationResponse: (response) {
-      // Always go to AlertDetailScreen with a dummy id
-      locator<AppRouter>().push(AlertDetailRoute(alertId: 'test123'));
+    onDidReceiveNotificationResponse: (NotificationResponse response) {
+      // The payload is the alertId
+      final alertId = response.payload ?? '';
+      if (alertId.isNotEmpty) {
+        locator<AppRouter>().push(AlertDetailRoute(alertId: alertId));
+      }
     },
   );
 
-
   // Foreground FCM messages
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    final androidDetails = AndroidNotificationDetails(
+    final myPhone = await locator<LoginRepository>().getPhoneNumber();
+    final senderPhone = message.data['senderPhone'];
+    if (myPhone != null && senderPhone == myPhone) {
+      debugPrint('Skipping notification because sender is me');
+      return;
+    }
+    final alertId = message.data['alertId'] ?? '';
+
+    const androidDetails = AndroidNotificationDetails(
       'alert_channel',
       'Alerts',
       channelDescription: 'Notifications for alerts',
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
-      sound: const RawResourceAndroidNotificationSound('siren'),
+      sound: RawResourceAndroidNotificationSound('siren'),
     );
 
-    final platformDetails = NotificationDetails(android: androidDetails);
+    const platformDetails = NotificationDetails(android: androidDetails);
 
     await flutterLocalNotificationsPlugin.show(
       0,
       message.notification?.title ?? 'Pabitra Alert',
       message.notification?.body ?? 'Someone has sent an alert!',
       platformDetails,
-      payload: 'alert', // static payload
+      payload: alertId,
     );
   });
-
 
   // Handle app opened from terminated state
   final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
   if (initialMessage != null) {
-    locator<AppRouter>().push(AlertDetailRoute(alertId: 'test123'));
+    final alertId = initialMessage.data['alertId'] ?? '';
+    if (alertId.isNotEmpty) {
+      locator<AppRouter>().push(AlertDetailRoute(alertId: alertId));
+    }
   }
 
   // Debug token
@@ -91,6 +104,7 @@ Future<void> main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -101,12 +115,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // Handle notification taps when app in background
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // Always go to AlertDetailScreen with a dummy id
-      appRoute.push( AlertDetailRoute(alertId: 'test123'));
+      final alertId = message.data['alertId'] ?? '';
+      if (alertId.isNotEmpty) {
+        appRoute.push(AlertDetailRoute(alertId: alertId));
+      }
     });
-
   }
 
   @override

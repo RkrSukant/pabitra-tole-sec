@@ -53,6 +53,16 @@ const TextStyle textFFFFFFs16w600 = TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: Dimens.textSize_16);
 
+const TextStyle textFFFFFFs16w400 = TextStyle(
+    color: AppColors.whiteFFFFFF,
+    fontWeight: FontWeight.w400,
+    fontSize: Dimens.textSize_16);
+
+const TextStyle textFFFFFFs18w600 = TextStyle(
+    color: AppColors.whiteFFFFFF,
+    fontWeight: FontWeight.w600,
+    fontSize: Dimens.textSize_18);
+
 const TextStyle textFFFFFFs12w600 = TextStyle(
     color: AppColors.whiteFFFFFF,
     fontWeight: FontWeight.w600,

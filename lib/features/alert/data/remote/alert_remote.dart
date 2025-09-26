@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pabitra_security/features/alert/data/model/alert_response_model.dart';
 
 abstract class AlertRemote {
-  Future<String> sendAlert({
+  Future<AlertModel> sendAlert({
     required String senderName,
     required String senderPhone,
     required String type,
