@@ -14,59 +14,54 @@ import 'package:pabitra_security/shared/helpers/strings.dart';
 import 'di/service_locator.dart' as di;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin();
 
-/// Background FCM handler
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  // Optionally handle data here
 }
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await di.setUpServiceLocator();
+Future<void> _initFirebase() async {
   await Firebase.initializeApp();
-
-  // Background notifications
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  // iOS permission
   await FirebaseMessaging.instance.requestPermission();
-
-  // Subscribe to topic if needed
   FirebaseMessaging.instance.subscribeToTopic('alerts');
+}
 
-  // Init local notifications
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  const InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
+Future<void> _initLocalNotifications() async {
+  const androidInit = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const initSettings = InitializationSettings(android: androidInit);
 
   await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
+    initSettings,
     onDidReceiveNotificationResponse: (NotificationResponse response) {
-      // The payload is the alertId
       final alertId = response.payload ?? '';
       if (alertId.isNotEmpty) {
         locator<AppRouter>().push(AlertDetailRoute(alertId: alertId));
       }
     },
   );
+}
 
-  // Foreground FCM messages
+Future<void> _handleInitialMessage() async {
+  final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+  if (initialMessage != null) {
+    final alertId = initialMessage.data['alertId'] ?? '';
+    if (alertId.isNotEmpty) {
+      locator<AppRouter>().push(AlertDetailRoute(alertId: alertId));
+    }
+  }
+}
+
+Future<void> _listenForegroundMessages() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     final myPhone = await locator<LoginRepository>().getPhoneNumber();
     final senderPhone = message.data['senderPhone'];
-    if (myPhone != null && senderPhone == myPhone) {
-      debugPrint('Skipping notification because sender is me');
-      return;
-    }
-    final alertId = message.data['alertId'] ?? '';
+    if (myPhone != null && senderPhone == myPhone) return;
 
+    final alertId = message.data['alertId'] ?? '';
     const androidDetails = AndroidNotificationDetails(
-      'alert_channel',
+      'alert_channel_v2',
       'Alerts',
       channelDescription: 'Notifications for alerts',
       importance: Importance.max,
@@ -74,7 +69,6 @@ Future<void> main() async {
       playSound: true,
       sound: RawResourceAndroidNotificationSound('siren'),
     );
-
     const platformDetails = NotificationDetails(android: androidDetails);
 
     await flutterLocalNotificationsPlugin.show(
@@ -85,20 +79,17 @@ Future<void> main() async {
       payload: alertId,
     );
   });
+}
 
-  // Handle app opened from terminated state
-  final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-  if (initialMessage != null) {
-    final alertId = initialMessage.data['alertId'] ?? '';
-    if (alertId.isNotEmpty) {
-      locator<AppRouter>().push(AlertDetailRoute(alertId: alertId));
-    }
-  }
-
-  // Debug token
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await di.setUpServiceLocator();
+  await _initFirebase();
+  await _initLocalNotifications();
+  await _listenForegroundMessages();
+  await _handleInitialMessage();
   final token = await FirebaseMessaging.instance.getToken();
   debugPrint('Device FCM Token: $token');
-
   runApp(const MyApp());
 }
 
