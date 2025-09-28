@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -24,7 +25,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 Future<void> _initFirebase() async {
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // Request notification permission (Android 13+ and iOS)
   await FirebaseMessaging.instance.requestPermission();
+
+  // Subscribe to alerts topic
   FirebaseMessaging.instance.subscribeToTopic('alerts');
 }
 
@@ -55,19 +60,21 @@ Future<void> _handleInitialMessage() async {
 
 Future<void> _listenForegroundMessages() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    // Skip showing notification if sender is me
     final myPhone = await locator<LoginRepository>().getPhoneNumber();
     final senderPhone = message.data['senderPhone'];
     if (myPhone != null && senderPhone == myPhone) return;
 
     final alertId = message.data['alertId'] ?? '';
+
     const androidDetails = AndroidNotificationDetails(
-      'alert_channel_v2',
+      'alert_channel_v2', // new channel id
       'Alerts',
       channelDescription: 'Notifications for alerts',
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
-      sound: RawResourceAndroidNotificationSound('siren'),
+      sound: RawResourceAndroidNotificationSound('siren'), // siren.mp3 in /res/raw
     );
     const platformDetails = NotificationDetails(android: androidDetails);
 
@@ -81,15 +88,28 @@ Future<void> _listenForegroundMessages() async {
   });
 }
 
+/// Request POST_NOTIFICATIONS permission explicitly on Android 13+
+Future<void> _ensureNotificationPermission() async {
+  if (Platform.isAndroid) {
+    // Since Flutter 3.13+ you can use this directly:
+    final settings = await FirebaseMessaging.instance.requestPermission();
+    // On Android, requestPermission() already covers POST_NOTIFICATIONS.
+    // If you want to be extra sure, use permission_handler package.
+  }
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.setUpServiceLocator();
   await _initFirebase();
+  await _ensureNotificationPermission();
   await _initLocalNotifications();
   await _listenForegroundMessages();
   await _handleInitialMessage();
+
   final token = await FirebaseMessaging.instance.getToken();
   debugPrint('Device FCM Token: $token');
+
   runApp(const MyApp());
 }
 
